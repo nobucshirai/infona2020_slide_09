@@ -1,0 +1,777 @@
+% [Overleaf] https://www.overleaf.com/read/bvhpfzsfdywz
+% [YouTube] https://youtu.be/JCuVRfg690A
+% [GitHub] https://github.com/nobucshirai/infona2020_slide_09
+\documentclass[dvipdfmx,aspectratio=169,20pt]{beamer}
+\usepackage{bxdpx-beamer}
+
+% Beamer theme
+\usetheme{Boadilla}
+
+%%%%% JAPANESE FONT SETTINGS %%%%%
+\usepackage[utf8]{inputenc}
+\usepackage{pxjahyper}
+\renewcommand{\kanjifamilydefault}{\gtdefault} % for Gothic Japanese fonts
+\newcommand{\myfontsetting}[3]{{\fontsize{#1}{#2}\selectfont #3}}
+\usepackage[deluxe,uplatex]{otf} % needed to use super bold Japanese fonts
+\usepackage[unicode,noto-otc]{pxchfon} % needed to use super bold Japanese fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% SETTINGS FOR MATH SYMBOLS %%%%%
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+%\usepackage{graphicx}
+\usepackage{latexsym}
+\usefonttheme{professionalfonts} % use Serif fonts for equations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{fancybox,ascmac}
+\usepackage{url}
+\usepackage[many]{tcolorbox}
+
+%%%%% ALGORITHM SETTING %%%%%
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\algsetup{linenosize=\color{fg!50}\fontsize{8pt}{8pt}\selectfont}
+\renewcommand\algorithmicdo{\bfseries :}
+\renewcommand\algorithmicthen{\bfseries :}
+\renewcommand\algorithmicrequire{\textbf{Input:}}
+\renewcommand\algorithmicensure{\textbf{Output:}}
+\renewcommand{\algorithmicprint}{\textbf{break}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{myblue1}{RGB}{45,130,200}
+\definecolor{myblue2}{RGB}{26,89,142}
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor*{structure}{fg=myblue1,bg=blue}
+\setbeamercolor{block title}{fg=myblue1!50!black}
+\setbeamercolor*{block title example}{fg=white,bg=myblue2}
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
+\setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!75!black}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=structure.fg!50!black}
+\setbeamercolor*{palette quaternary}{fg=black,bg=myblue1}
+
+\setbeamerfont{alerted text}{series=\bfseries}
+\setbeamerfont{section in toc}{series=\mdseries}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{date}{size=\small}
+
+\setbeamertemplate{block title}[shadow=false]
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+%%%%% BEAMER FOOTLINE SETTINGS %%%%%%
+\setbeamertemplate{footline}[frame number]{}
+\setbeamerfont{footline}{size=\bf\footnotesize\small}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% BEAMER ITEM SETTINGS %%%%%
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamertemplate{enumerate item}[circle]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+%%%%% START_TAG B %%%%%
+\frametitle{[問題] V\hspace{-.1em}I\hspace{-.1em}I\hspace{-.1em}I-B}
+%\noindent{\bf V\hspace{-.1em}I\hspace{-.1em}I\hspace{-.1em}I-B.}
+\myfontsetting{15pt}{20pt}{
+(1) {V\hspace{-.1em}I\hspace{-.1em}I\hspace{-.1em}I-A} の問3にある8つのデータ点を最小2乗法を用いて3次多項式 $p_3(x)$ を当てはめる問題を考える。正規方程式をLU分解で解くプログラムを作成し $p_3(x)$ の係数を有効数字4桁で5桁目を四捨五入して求めよ。
+作成したプログラムも提出すること。プログラミング言語は問わない。\\
+(2) 問1の正規方程式をハウスホルダー法を用いてQR分解してから解くプログラムを作成し $p_3(x)$ の係数を有効数字4桁で5桁目を四捨五入して求めよ。
+作成したプログラムも提出すること。プログラミング言語は問わない。
+}
+%%%%% END_TAG B %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[略解] V\hspace{-.1em}I\hspace{-.1em}I\hspace{-.1em}I-B}
+\myfontsetting{18pt}{18pt}{
+(1), (2)
+$p_3(x)=a + b x + c x^2 + dx^3$ とした時、
+\[
+\begin{matrix}
+a = -2.827, & b =  13.33, &c = -4.514, & d = 1.055
+\end{matrix}
+\]
+}
+
+\vspace{10mm}
+
+\myfontsetting{10pt}{10pt}{
+※ この問題では条件数が小さくLU分解で解いてもQR分解で解いても精度に差はない。
+}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{{\large 連立一次方程式の数値解の誤差}}
+
+\begin{itemize}
+    \setlength{\itemsep}{0.2cm}
+    \item \myfontsetting{15pt}{15pt}{
+    $\varepsilon$ を用いて連立一次方程式 $A\bm{x}=\bm{b}$ の数値誤差を $(A+\varepsilon E)(\bm{x}+\delta \bm{x})=(\bm{b}+\varepsilon \bm{d})$ と表現する
+    }
+    \begin{itemize}
+        \item \myfontsetting{12pt}{12pt}{
+        $\delta \bm{x}$ を見積もるには{\bf 条件数}が使える
+        }
+    \end{itemize}
+    \item \myfontsetting{15pt}{15pt}{
+    行列 $A$ の{\bf 条件数} \myfontsetting{15pt}{15pt}{ (condition number)}}
+    \begin{itemize}
+        \vspace{2mm}
+        \item \myfontsetting{15pt}{15pt}{
+        $\kappa(A) = \|A\|_2\|A^{-1}\|_2$
+        } \hspace{2mm} \myfontsetting{12pt}{12pt}{
+          (\myfontsetting{10pt}{10pt}{ $\displaystyle\|A\|_2 = \sup_{\bm{x}\neq 0}\frac{\|A\bm{x}\|_2}{\|\bm{x}\|_2}$, $\|\bm{x}\|_2 = \sqrt{\sum_{i=1}^m x_i^2}$
+            } )}
+     \end{itemize}
+     \item \myfontsetting{15pt}{15pt}{
+     $\kappa(A)$ を用いた数値解の誤差 $\delta\bm{x}$ の評価式
+     }
+     \begin{itemize}
+         \item 
+         \myfontsetting{12pt}{12pt}{
+         $\displaystyle
+             \frac{\| \delta \bm{x} \|_2}{\|\bm{x}\|_2} \le \kappa(A)\, \varepsilon\, \left( \frac{\|E\|_2}{\|A\|_2} +  \frac{\|\bm{d}\|_2}{\|\bm{b}\|_2} \right)$
+         }
+     \end{itemize}
+ \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large 正規方程式の条件数}}
+\begin{itemize}
+    \setlength{\itemsep}{0.25cm}
+    \item \myfontsetting{15pt}{15pt}{
+        正規方程式 $(X^\mathsf{T} X) \bm{a} = X^\mathsf{T} \bm{y}$ に現れる係数行列 $X^\mathsf{T} X$の条件数が満たす関係式 $\kappa(X^\mathsf{T} X) \le \kappa(X)^2$
+    }
+    \begin{itemize}
+        \item \myfontsetting{12pt}{12pt}{
+        %$X^\mathsf{T} X$ の条件数は $\kappa(X)$ の2乗で抑えられており
+        $\kappa(X^\mathsf{T} X)$ は $\kappa(X)$ の2乗で大きくなる可能性がある
+        }
+        \item \myfontsetting{12pt}{12pt}{
+        一般に正規方程式をLU分解+前進・後退代入で解くと誤差が大きくなることが知られている
+        }
+    \end{itemize}
+    \item \myfontsetting{15pt}{15pt}{
+    正規方程式の数値解法では旨くするための工夫が必要
+    }
+    \begin{itemize}
+        \item \myfontsetting{12pt}{12pt}{
+        {\bf QR分解}により係数行列の条件数を小さくする方法
+        }
+        \item \myfontsetting{12pt}{12pt}{ 特異値分解や固有値分解を行う手法
+        }
+        \item \myfontsetting{12pt}{12pt}{
+       コレスキー法 \myfontsetting{8pt}{8pt}{ ( $X^\mathsf{T}X$ が正定値対称であることを利用して $X=LL^\mathsf{T}$ と変形) }
+        }
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{24pt}{24pt}{QR分解---正規方程式の旨い解き方}}
+\begin{block}{\myfontsetting{20pt}{22pt}{\bf QR分解} {\small (QR factorization)}}
+\myfontsetting{17pt}{17pt}{
+ある行列 $X$ を直交行列 $Q$ と上三角行列 $R$ を用いて $X=QR$ の形に変形すること
+}
+\end{block}
+\vspace{-2mm}
+\begin{itemize}
+    %\setlength{\itemsep}{0.5cm}
+    \item \myfontsetting{14pt}{16pt}{ 
+    正規方程式に出てくる正規行列 $X$ \myfontsetting{10pt}{10pt}{ 
+    $(\in \mathbb{R}^{m\times (n+1)})$
+    } を直交行列 $Q$ \myfontsetting{10pt}{10pt}{ 
+    $(\in \mathbb{R}^{m\times (n+1)})$
+    } と上三角行列 $R$ \myfontsetting{10pt}{10pt}{ 
+    $(\in \mathbb{R}^{(n+1)\times (n+1)})$
+    } で表現する
+    }
+     \begin{itemize}
+         \item \myfontsetting{10pt}{12pt}{ 
+    正規方程式は $R\bm{a} = Q^\mathsf{T}\bm{y}$ と書き換えることができ条件数は $\kappa(R)$ となる
+        }
+     \end{itemize}
+     \item \myfontsetting{14pt}{16pt}{ 
+     QR分解を実行する方法は複数ある
+     }
+     \begin{itemize}
+         \item \myfontsetting{12pt}{14pt}{ グラム・シュミットの直交化、 {\bf ハウスホルダー変換}
+         }
+     \end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{22pt}{22pt}{ハウスホルダー変換を用いたQR分解}}
+\begin{block}{\myfontsetting{15pt}{15pt}{\bf ハウスホルダー変換 \myfontsetting{12pt}{12pt}{(Householder transformation)}}}
+\myfontsetting{12pt}{12pt}{
+ {\bf ハウスホルダー行列} $H(\bm{u}) = I - \bm{u}\bm{u}^\mathsf{T}$   \myfontsetting{10pt}{10pt}{ $(\|\bm{u}\|_2 = \sqrt{2})$} を作用させることで任意のベクトルを $\bm{u}$ を法線ベクトルに持つ平面に対して鏡像なベクトルに移す変換
+}
+\end{block}
+\vspace{-2mm}
+\begin{itemize}
+    %\setlength{\itemsep}{0.05cm}
+        \item \myfontsetting{12pt}{12pt}{ 
+            $H(\bm{u})$ は対称行列かつ直交行列 $(H(\bm{u})^2 = I)$
+        }
+        \begin{itemize}
+            \item \myfontsetting{10pt}{10pt}{ 
+            鏡像変換であるため2回作用させると元の像に戻ることを意味する
+            }
+        \end{itemize}
+        
+       \item \myfontsetting{12pt}{12pt}{
+    行列 $X=[\bm{x}_0,\bm{x}_1,\dots, \bm{x}_n]$ の各列ベクトルに対してうまくハウスホルダー行列を選んで作用させれば必要な成分以外を0にできる
+    }
+    \begin{itemize}
+        \item \myfontsetting{10pt}{10pt}{
+    元の行列を直交行列と下三角行列の積 ({\bf QR分解}) や直交行列と上ヘッセンベルグ行列の積の形に書き換えることができる
+    }
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{\myfontsetting{24pt}{24pt}{[手法] 最小2乗法の準備---$X$ の構成}}
+    \begin{block}{\myfontsetting{12pt}{12pt}{\bf Preparation for least squares approximation---construction of normal matrix}}
+        \myfontsetting{15pt}{18pt}{
+        \begin{algorithmic}[1]
+            \REQUIRE $x_i$ \myfontsetting{8pt}{8pt}{$(0\le i \le m-1)$}
+            \ENSURE $X$ \myfontsetting{8pt}{8pt}{ $(\in \mathbb{R}^{m\times (n+1)})$}
+            \FOR{$j = 0, 1, \dots, m-1$}
+            \STATE $X_{i0} = 1$
+            \ENDFOR
+            \FOR{$i = 0, 1, \dots, m-1$}
+            \FOR{$j = 1, \dots, n$}
+            \STATE $X_{ij} = x_i^j$
+            \ENDFOR
+            \ENDFOR
+ \end{algorithmic}
+        }
+    \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{18pt}{18pt}{[手法] ハウスホルダー変換を用いたQR分解}}
+
+\myfontsetting{8pt}{10pt}{
+\begin{block}{\myfontsetting{10pt}{10pt}{\bf QR factorization using Householder transformation}}
+    %\myfontsetting{6pt}{6pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $X_{ij}$ \myfontsetting{6pt}{6pt}{ $(0\le i \le m-1, 0\le j \le n)$}
+        \ENSURE $X_{ij}$ \myfontsetting{6pt}{6pt}{ $(0\le i \le n, 0\le j \le n)$},\myfontsetting{6pt}{6pt}{ [上三角行列$R$]}
+        $y_i$ \myfontsetting{6pt}{6pt}{ $(0\le i \le n)$}%\\ %\hspace{3mm}
+        \myfontsetting{6pt}{6pt}{ [$Q^\mathsf{T}\bm{y}$]}
+        \FOR{$j=0, 1,\dots, n$}
+        \FOR{$i=0,1,\dots,j-1$}
+        \STATE $u_i \leftarrow 0$
+        \ENDFOR
+        \STATE $t \leftarrow \sqrt{\sum_{i=j}^{m-1} X_{ij}^2}$ 
+        %\hspace{5mm} \myfontsetting{8pt}{8pt}{[$j$ 列目 $j,\dots, m-1$ 行目の要素が作る縦ベクトルの2ノルム]}
+        %\STATE 
+        ; \hspace{2mm}$d \leftarrow \mathrm{sign}(X_{jj}) \times t$; \hspace{2mm} $g \leftarrow \sqrt{t(t+|X_{jj}|)}$; \hspace{2mm} $u_j \leftarrow (X_{jj} + d )/ g$; \hspace{2mm} $X_{jj} \leftarrow -d$
+        \FOR{$i=j+1, j+2,\dots, m-1$}
+        \STATE $u_i \leftarrow X_{ij}/g$; \hspace{2mm} $X_{ij} \leftarrow 0$
+        \ENDFOR
+        \FOR{$k=j+1j+2,\dots,n$} 
+        \STATE $sum \leftarrow \sum_{\ell =j}^{m-1} u_\ell X_{\ell k}$
+        \FOR{$i=j,j+1,\dots,m-1$}
+        \STATE $T_{ik} \leftarrow X_{ik} - sum \times u_i$
+        \ENDFOR
+        \ENDFOR
+        \FOR{$i=j,j+1,\dots,m-1$}
+        \FOR{$k=j+1,\dots,n$}
+        \STATE $X_{ik} \leftarrow T_{ik}$
+        \ENDFOR
+        \ENDFOR
+        \STATE $sum \leftarrow \sum_{k=j}^{m-1} u_k y_k$
+    \FOR{$i=j,j+1,\dots,m-1$}
+        \STATE $y_i \leftarrow y_i - sum \times u_i$
+        \ENDFOR
+        \ENDFOR
+ \end{algorithmic}
+       % }
+\end{block}
+} 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{16pt}{16pt}{[手法] QR分解後の正規方程式 $R\bm{a}=Q^\mathsf{T}\bm{y}$ を後退代入で解く}}
+    \begin{block}{\myfontsetting{15pt}{15pt}{\bf Backward substitution of normal equation $R\bm{a}=Q^\mathsf{T}\bm{y}$}}
+        \myfontsetting{15pt}{15pt}{
+        \begin{algorithmic}[1]
+            \REQUIRE $X_{ij}$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n, 0\le j \le n)$}, $y_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n)$}\\ %\hspace{3mm}
+            \myfontsetting{8pt}{8pt}{[上三角行列 $R$ が $X_{ij}$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n, 0\le j \le n)$} として与えられ、$Q^\mathsf{T}\bm{y}$ は $y_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n)$ として与えられる} ]}
+            \ENSURE $a_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n)$}
+            \STATE $a_n \leftarrow y_n / X_{nn}$
+            \FOR{$i=n-1, n-3, \dots, 0$}
+            \STATE $a_i \leftarrow \left( y_i - \sum_{j=i+1}^{n} X_{ij}\, a_j \right)/X_{ii}$
+            \ENDFOR
+ \end{algorithmic}
+        }
+    \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%タイトルページ
+
+\title{\myfontsetting{28pt}{28pt}{ 固有値問題と特異値分解 (1)}}
+\titlegraphic{\vspace{-7mm}\flushright\includegraphics[width=1.8cm,height=1.8cm]{hattari_kun_good_org.eps}}
+
+\setbeamertemplate{title page}{%
+    \begin{flushright}
+        \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+    \end{flushright}
+    \vspace{-0.6cm}
+    \hspace{1.5cm}{\selectfont\usebeamerfont{subtitle} \usebeamercolor[fg]{subtitle} [\href{https://youtu.be/JCuVRfg690A}{数値解析 第9回}] \par}
+    \vspace{0.5cm}
+    %\vspace{2.5em}
+    {\centering\usebeamerfont{title} \usebeamercolor[fg]{title} \inserttitle \par}
+    \vspace{0.5cm}
+    \begin{center}
+        \myfontsetting{15pt}{15pt}{
+        線形変換を特徴付ける特別なベクトルと値を探す
+        }
+    \end{center}
+}
+
+\date[\todey]{}
+
+\frame{\titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\large 対角行列と直交行列を用いた行列の変換}
+\begin{itemize}
+    %\setlength{\itemsep}{0.05cm}
+    \item \myfontsetting{18pt}{18pt}{ 
+    固有値問題 \myfontsetting{12pt}{12pt}{ (Eigenvalue problem)}
+    }
+    \begin{itemize}
+        \item \myfontsetting{12pt}{12pt}{ 
+        行列の対角化 (Diagonalization) とも呼ばれる
+        }
+        \item
+        \myfontsetting{12pt}{12pt}{
+        物理の問題でよく現れる
+        }
+        \begin{itemize}
+            \item \myfontsetting{10pt}{10pt}{ 慣性主軸を求める問題 (力学)
+            }
+            \item \myfontsetting{10pt}{10pt}{ 固有振動数と固有振動モードを求める問題 (構造力学)
+            }
+            \item \myfontsetting{10pt}{10pt}{ 量子系においてハミルトニアンから固有状態と固有エネルギーを求める問題 (量子力学・量子化学)
+            }
+        \end{itemize}
+    \end{itemize}
+    \item \myfontsetting{18pt}{18pt}{ 
+    特異値分解 \myfontsetting{12pt}{12pt}{ (Singular value decomposition)}}
+    \begin{itemize}
+        \item
+        \myfontsetting{12pt}{12pt}{ 特殊なケースで固有値問題と一致する}
+        \item \myfontsetting{12pt}{12pt}{ 
+        データ解析に使える
+        }
+        \begin{itemize}
+            \item \myfontsetting{12pt}{12pt}{{\bf 最小2乗法}・{\bf 主成分分析}}
+            
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\large 固有値問題の問題設定}
+
+\begin{block}{\myfontsetting{22pt}{22pt}{\bf 固有値問題} {\small (Eigenvalue problem)}}
+\myfontsetting{17pt}{17pt}{
+    行列 $A$ \myfontsetting{12pt}{12pt}{
+    $(\in \mathbb{R}^{n\times n})$
+    }
+    に対して $A\bm{x} = \lambda \bm{x}$ を満たす非零の固有値 $\lambda$ と固有ベクトル $\bm{x}$ の組 (固有対) を求める問題
+}
+\end{block}
+
+\vspace{-2mm}
+
+\begin{itemize}
+    %\setlength{\itemsep}{0.05cm}
+    \item \myfontsetting{15pt}{15pt}{ 
+    固有対が $n$ 組ある場合、
+    固有ベクトル \myfontsetting{12pt}{12pt}{ $\bm{x}_1,\bm{x}_2,\dots,\bm{x}_n$} を互いに直交するようにとって正規化すると
+    \myfontsetting{12pt}{12pt}{ 
+    $X=[\bm{x}_1,\bm{x}_2,\dots,\bm{x}_n]$}
+    は直交行列となる
+    }
+    \item \myfontsetting{15pt}{15pt}{ 
+    固有値\myfontsetting{12pt}{12pt}{ $\lambda_1, \lambda_2, \dots, \lambda_n$}を対角に並べた対角行列 $\Sigma$ を用いると $A$ は\myfontsetting{12pt}{12pt}{ $AX=X\Sigma \Leftrightarrow A=X\Sigma X^\mathsf{T}$} と表せる
+    }
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\large 特異値分解の問題設定}
+\begin{block}{\myfontsetting{22pt}{22pt}{\bf 特異値分解} \myfontsetting{15pt}{15pt}{ (Singular value decomposition)}}
+\myfontsetting{17pt}{17pt}{
+    行列 $B$ \myfontsetting{12pt}{12pt}{ 
+    $(\in \mathbb{R}^{m\times n})$
+    }
+    に対し2つの直交行列 $U$ \myfontsetting{12pt}{12pt}{
+    $(\in \mathbb{R}^{m\times m})$
+    }, $V$ \myfontsetting{12pt}{12pt}{
+    $(\in \mathbb{R}^{n\times n})$
+    } および特異値を対角に並べた $\Sigma$ \myfontsetting{12pt}{12pt}{
+    $(\in \mathbb{R}^{m\times n})$
+    }を用いて $B=U\Sigma V^\mathsf{T}$ と変形する問題
+}
+\end{block}
+
+\vspace{-2mm}
+
+\begin{itemize}
+    %\setlength{\itemsep}{0.5cm}
+    \item \myfontsetting{14pt}{15pt}{ $B^\mathsf{T}B=V\Sigma ^\mathsf{T}\Sigma V^\mathsf{T}$ とすると正方行列 $B$ に対する固有値問題と同じ形になる
+    }
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [手法] ベキ乗法 \myfontsetting{15pt}{15pt}{ (全体像)}}}
+\begin{block}{{\bf\small ベキ乗法}
+\myfontsetting{13pt}{18pt}{ (Power method)}}
+    \myfontsetting{14pt}{16pt}{
+    \begin{algorithmic}[1]
+        \label{alg:power_method}
+        \REQUIRE $A$, $\bm{u}$ \myfontsetting{10pt}{10pt}{ $\in \mathbb{R}^n$}, $k_\mathrm{max}$, $\varepsilon$ \myfontsetting{8pt}{8pt}{ [$u_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n-1)$} の初期値は $\bm{u}\neq \mathbf{0}$ となるように適当に選ぶ]}
+        \ENSURE $\lambda$, $\bm{y}$
+        \FOR{$k=0,1,\dots,k_\mathrm{max}$}
+        \STATE $\bm{y} \leftarrow \bm{u} / \|\bm{u}\|$ \label{op:normalization}
+        \STATE $\bm{u} \leftarrow A\bm{y}$ \label{op:matrix_operation}
+        \STATE $\lambda \leftarrow (\bm{y}, \bm{u})$ \label{op:inner_product}
+        \IF{$\|\bm{u} - \lambda \bm{y}\|\le \varepsilon$} \label{op:vector_norm}
+        \PRINT
+        \ENDIF
+        \ENDFOR
+    \end{algorithmic}
+    }
+\end{block}
+
+\vspace{-2mm}
+
+\myfontsetting{10pt}{10pt}{
+※ 上記アルゴリズムのうち $\mathbf{\ell\ell}$.~\ref{op:normalization}--\ref{op:vector_norm} の詳細を次ページ以降で示している}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{22pt}{22pt}{ [手法] ベクトルの正規化  \myfontsetting{18pt}{18pt}{ (p.~\ref{alg:power_method} $\mathbf{\ell}$.~\ref{op:normalization}; $\bm{y} \leftarrow \bm{u} / \|\bm{u}\|$)}}}
+\begin{block}{ {\bf\small Normalization of $\bm{u}$ \myfontsetting{10pt}{10pt}{(p.~\ref{alg:power_method} $\mathbf{\ell}$.~\ref{op:normalization}; $\bm{y} \leftarrow \bm{u} / \|\bm{u}\|$)}}}
+    \myfontsetting{14pt}{16pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $\bm{u}$ ($u_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n-1)$})
+        \ENSURE $\bm{y}$ ($y_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n-1)$})
+        \STATE $norm \leftarrow 0$
+        \FOR{$i=0,1,\dots,n-1$}
+        \STATE $norm \leftarrow norm + u_i^2$
+        \ENDFOR
+        \STATE $norm\leftarrow \sqrt{norm}$
+        \FOR{$i=0,1,\dots,n-1$}
+        \STATE $y_i \leftarrow u_i / norm$
+        \ENDFOR
+        \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{22pt}{22pt}{ [手法] 行列演算} \myfontsetting{18pt}{18pt}{(p.~\ref{alg:power_method} $\mathbf{\ell}$.~\ref{op:matrix_operation}; $\bm{u} \leftarrow A\bm{y}$)}}
+\begin{block}{ {\bf\small Matrix operation \myfontsetting{10pt}{10pt}{(p.~\ref{alg:power_method} $\mathbf{\ell}$.~\ref{op:matrix_operation}; $\bm{u} \leftarrow A\bm{y}$)}}}
+    \myfontsetting{14pt}{16pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $\bm{y}$ ($y_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n-1)$})
+        \ENSURE $A$, $\bm{u}$ ($u_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n-1)$})
+        \STATE $sum \leftarrow 0$
+        \FOR{$i=0,1,\dots,n-1$}
+        \FOR{$j=0,1,\dots,n-1$}
+        \STATE $sum \leftarrow sum + A_{ij} y_j^{(k)}$
+        \ENDFOR
+        \STATE $u_i \leftarrow sum$
+        \ENDFOR
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{22pt}{22pt}{ [手法] ベクトルの内積} \myfontsetting{18pt}{18pt}{(p.~\ref{alg:power_method} $\mathbf{\ell}$.~\ref{op:inner_product}; $\lambda \leftarrow (\bm{y}, \bm{u})$)}}
+\begin{block}{ {\bf\small Inner product of vectors \myfontsetting{10pt}{10pt}{(p.~\ref{alg:power_method} $\mathbf{\ell}$.~\ref{op:inner_product}; $\lambda \leftarrow (\bm{y}, \bm{u})$)}}}
+    \myfontsetting{14pt}{16pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $\bm{y}$ ($y_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n-1)$}), $\bm{u}$ ($u_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n-1)$})
+        \ENSURE $\lambda$
+        \STATE $\lambda \leftarrow 0$
+        \FOR{$i=0,1,\dots,n-1$}
+        \STATE $\lambda \leftarrow \lambda + y_i u_i$
+        \ENDFOR
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{22pt}{22pt}{ [手法] ベクトルの長さの計算}
+\myfontsetting{18pt}{18pt}{ (p.~\ref{alg:power_method} $\mathbf{\ell}$.~\ref{op:vector_norm})}
+}
+
+\begin{block}{\myfontsetting{12pt}{12pt}{\bf Calculation of vector norm $ \|\bm{u} - \lambda \bm{y}\|$ \myfontsetting{10pt}{10pt}{(p.~\ref{alg:power_method} $\mathbf{\ell}$.~\ref{op:vector_norm}; in the condition of if statement)}}}
+    \myfontsetting{14pt}{16pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $\bm{y}$ ($y_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n-1)$}), $\bm{u}$ ($u_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n-1)$})
+        \ENSURE $norm$ \hspace{3mm} \myfontsetting{10pt}{10pt}{ [$\|\bm{u} - \lambda \bm{y}\|$ の値を $norm$ として出力]}
+        \STATE $norm \leftarrow 0$
+        \FOR{$i=0,1,\dots,n-1$}
+        \STATE $norm \leftarrow norm + (u_i - \lambda y_i)^2$
+        \ENDFOR
+        \STATE $norm \leftarrow \sqrt{norm}$
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[問題] I\hspace{-.1em}X-A}
+%%%%% START_TAG A %%%%%
+%\noindent{\bf [I\hspace{-.1em}X. 固有値問題と特異値分解 (1)]}%RETURN
+
+%\noindent{\bf I\hspace{-.1em}X-A.} 
+\myfontsetting{15pt}{17pt}{
+{V\hspace{-.1em}I\hspace{-.1em}I\hspace{-.1em}I-A} の問3にある8つのデータ点を用いて $2\times 2$ の分散・共分散行列を構成し、ベキ乗法を用いて絶対値が最大の固有値とそれに対応する固有ベクトルを求めるプログラムを作成せよ。
+また分散・共分散行列が対称であり固有ベクトル同士が互いに直交する性質を利用してもう一つの固有値と固有ベクトルを求めよ。固有ベクトルは長さを1に正規化し、値は有効数字4桁で5桁目を四捨五入して求めよ。%RETURN
+}
+\myfontsetting{12pt}{12pt}{
+\noindent ※ 固有ベクトルを決める際に残る向きの自由度はどちらの方向を選んでも構わない。また分散共分散行列を求める際に不変分散を用いても良い。
+}
+%%%%% END_TAG A %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[略解] I\hspace{-.1em}X-A}
+
+
+最大固有値 2573 
+\myfontsetting{12pt}{12pt}{
+(不変分散・不変共分散を用いた場合\footnote{\myfontsetting{10pt}{10pt}{ データ点数で割る定義の分散・共分散を用いた場合の値は 2251}})
+}
+
+対応する固有ベクトル [0.03835, 0.9993]
+
+\vspace{-3mm}
+
+\myfontsetting{12pt}{12pt}{
+[-0.03835, -0.9993]も正しい
+}
+
+\vspace{2mm}
+
+もう一つの固有値 0.5025
+\myfontsetting{10pt}{10pt}{
+(不変分散・不変共分散を用いた場合\footnote{\myfontsetting{10pt}{10pt}
+{
+データ点数で割る定義の分散・共分散を用いた場合の値は 0.4397}
+})
+}
+
+対応する固有ベクトル[-0.9993,  0.03835]
+
+\vspace{-3mm}
+
+\myfontsetting{12pt}{12pt}{
+[0.9993, -0.03835]も正しい
+}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+%%%%% PASTE_START_TAG B %%%%%
+\frametitle{[問題] I\hspace{-.1em}X-B}
+%\noindent{\bf I\hspace{-.1em}X-B.}
+
+\myfontsetting{18pt}{18pt}{
+表~\ref{table:pokemon_go}
+\myfontsetting{12pt}{12pt}{(次ページ)}
+にある8匹のポケモンのステータスのデータから $3\times 3$ の相関行列を構成し、ベキ乗法を用いて絶対値が最大の固有値 $\lambda_1$ とそれに対応する固有ベクトル $\bm{y}_1$ を求めるプログラムを作成せよ。
+固有ベクトルは長さを1に正規化し、値は有効数字4桁で5桁目を四捨五入して求めよ。%\\
+}\\
+\myfontsetting{10pt}{10pt}{
+※ 固有ベクトルを決める際に残る向きの自由度はどちらの方向を選んでも構わない。
+}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[問題] I\hspace{-.1em}X-B 表~\ref{table:pokemon_go}}
+
+\myfontsetting{12pt}{12pt}{
+\begin{table}[htbp]
+    \centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+ポケモン & HP & 攻撃 & 防御\\
+\hline
+ピカチュウ  & 111 & 112 & 96\\
+ライチュウ  & 155 & 193 & 151\\
+イーブイ	& 146 & 104 & 114\\
+コイキング	& 85 & 29 & 85\\
+ギャラドス	& 216& 237 & 186\\
+カビゴン	& 330 & 190 & 169\\
+ミュウ	    & 225 &210 & 210\\
+ミュウツー	& 214 & 300 & 182\\
+\hline
+\end{tabular}
+\caption{
+\myfontsetting{10pt}{10pt}{
+「ポケモンGO」に出てくる8匹のポケモンのステータス。データは以下のサイトを参照した (\url{https://pokemongo.gamewith.jp/article/show/35945})。\label{table:pokemon_go}}
+}
+\end{table}
+}
+%%%%% PASTE_END_TAG B %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+
+\vspace{10mm}
+
+\begin{center}
+    \myfontsetting{36pt}{36pt}{\bf \color{myblue1} 修正前のコード (1)}
+    
+    \vspace{5mm}
+    
+    \begin{flushleft}
+    \myfontsetting{12pt}{12pt}{ ※ 2020/12/3に配信した授業で説明したQR分解の遅いアルゴリズムを次ページ以降に残しておく。}
+    
+    \vspace{2.5mm}
+    
+    \myfontsetting{12pt}{12pt}{ ※ 「$Q$ の構成」と書かれたアルゴリズムで行列の形の $Q$ を求めてしまうと計算量のオーダーが上がってしまう。$Q$ を構成するハウスホルダー行列の性質を生かしてベクトル同士の演算で済ませるのがポイント。}
+    \end{flushleft}
+\end{center}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{18pt}{18pt}{[手法] ハウスホルダー変換を用いたQR分解---$R$ の構成}}
+    \begin{block}{\myfontsetting{12pt}{12pt}{\bf QR factorization using Householder transformation---construction of $R$}}
+        \myfontsetting{10pt}{12pt}{
+        \begin{algorithmic}[1]
+            \REQUIRE $X$ \myfontsetting{8pt}{8pt}{$(\in \mathbb{R}^{m\times (n+1)})$}
+            \ENSURE $U$, $X$ \myfontsetting{8pt}{8pt}{ $(\in \mathbb{R}^{m\times (n+1)})$} \hspace{3mm}\myfontsetting{8pt}{8pt}{[上三角行列 $R$ が $X$ として得られる]}
+            \FOR{$j=0, 1,\dots, n$}
+            \STATE $t \leftarrow \sqrt{\sum_{i=j}^{m-1} X_{ij}^2}$ 
+            %\hspace{5mm} \myfontsetting{8pt}{8pt}{[$j$ 列目 $j,\dots, m-1$ 行目の要素が作る縦ベクトルの2ノルム]}
+            %\STATE 
+            ; \hspace{2mm}$d \leftarrow \mathrm{sign}(X_{jj}) \times t$; \hspace{2mm} $g \leftarrow \sqrt{t(t+|X_{jj}|)}$
+            \STATE $U_{jj} \leftarrow (X_{jj} + d )/ g$; \hspace{2mm} $X_{jj} \leftarrow -d$
+            \FOR{$i=j+1, j+2,\dots, m-1$}
+            \STATE $U_{ij} \leftarrow X_{ij}/g$; \hspace{2mm} $X_{ij} \leftarrow 0$
+            \ENDFOR
+            \FOR{$i=j,j+1,\dots,m-1$}
+            \FOR{$k=j+1,j+2,\dots,n$}
+            \STATE $T_{ik} \leftarrow X_{ik} - \left(\sum_{\ell =j}^{m-1} U_{\ell j}X_{\ell k}\right) U_{ij}$
+            \ENDFOR
+            \ENDFOR
+            \FOR{$i=j,j+1,\dots,m-1$}
+            \FOR{$k=j+1,\dots,n$}
+            \STATE $X_{ik} \leftarrow T_{ik}$
+            \ENDFOR
+            \ENDFOR
+            \ENDFOR
+ \end{algorithmic}
+        }
+    \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{18pt}{18pt}{[手法] ハウスホルダー変換を用いたQR分解---$Q$ の構成}}
+    \begin{block}{\myfontsetting{12pt}{12pt}{\bf QR factorization using Householder transformation---construction of $Q$}}
+        \myfontsetting{15pt}{18pt}{
+        \begin{algorithmic}[1]
+            \REQUIRE $U$ \myfontsetting{8pt}{8pt}{$(\in \mathbb{R}^{m\times (n+1)})$}
+            \ENSURE $Q$ \myfontsetting{8pt}{8pt}{ $(\in \mathbb{R}^{m\times m})$} %\hspace{3mm}\myfontsetting{8pt}{8pt}{[直交行列 $Q$ が $H$ として得られる]}
+            \FOR{$\ell =0, 1,\dots, n$}
+            \FOR{$i = 0, 1, \dots, m-1$}
+            \FOR{$j = 0, 1, \dots, m-1$}
+            \STATE $T_{ij} \leftarrow Q_{ij} - U_{i\ell} \left(\sum_{k=0}^{m-1} U_{k\ell}Q_{kj}\right) $
+            \ENDFOR
+            \ENDFOR
+            \FOR{$i = 0, 1, \dots, m-1$}
+            \FOR{$j = 0, 1, \dots, m-1$}
+            \STATE $Q_{ij} \leftarrow T_{ij}$
+            \ENDFOR
+            \ENDFOR
+            \ENDFOR
+ \end{algorithmic}
+        }
+    \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{\myfontsetting{16pt}{16pt}{ [手法] QR分解後の正規方程式 $R\bm{a}=Q^\mathsf{T}\bm{y}$ を後退代入で解く}}
+    \begin{block}{\myfontsetting{12pt}{12pt}{\bf Backward substitution of normal equation $R\bm{a}=Q^\mathsf{T}\bm{y}$}}
+        \myfontsetting{10pt}{14pt}{
+        \begin{algorithmic}[1]
+            \REQUIRE $X$, $Q$ \myfontsetting{8pt}{8pt}{$(\in \mathbb{R}^{m\times (n+1)})$}, $y_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le m)$}
+            \ENSURE $a_i$ \myfontsetting{8pt}{8pt}{ $(0\le i \le n)$}
+            \FOR{$j = 0, 1, \dots, n$}
+            \STATE $z_j \leftarrow \sum_{k=0}^{m-1} Q_{jk}\, y_k$
+            \ENDFOR
+            \STATE $a_n \leftarrow z_n / X_{nn}$
+            \FOR{$i=n-1, n-3, \dots, 0$}
+            \STATE $a_i \leftarrow \left(z_i - \sum_{j=i+1}^{n} X_{ij}\, a_j \right)/X_{ii}$
+            \ENDFOR
+ \end{algorithmic}
+        }
+    \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+
+\vspace{10mm}
+
+\begin{center}
+    \myfontsetting{36pt}{36pt}{\bf \color{myblue1}  修正前のコード (2)}
+    
+    \vspace{5mm}
+    
+    \begin{flushleft}
+    \myfontsetting{12pt}{12pt}{ ※ 2020/12/3に配信した授業で説明したベキ乗法のアルゴリズムを次ページ以降に残しておく。修正後ではベクトルや行列で表記した部分をfor文を含むアルゴリズムとして書き換えている。}
+    \end{flushleft}
+\end{center}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [手法] ベキ乗法}}
+    \begin{block}{{\bf\small ベキ乗法}
+    \myfontsetting{13pt}{18pt}{ (Power method)}}
+        \myfontsetting{14pt}{16pt}{
+        \begin{algorithmic}[1]
+            \REQUIRE $A$, $\bm{u}_0$, $k_\mathrm{max}$, $\varepsilon$
+            \ENSURE $\lambda$, $\bm{x}$
+            \FOR{$k=0,1,\dots,k_\mathrm{max}$}
+            \STATE $\bm{y}_k \leftarrow \bm{u}_k / \|\bm{u}_k\|_2$
+            \STATE $\bm{u}_{k+1} \leftarrow A\bm{y}_k$
+            \STATE $\lambda_k \leftarrow (\bm{y}_k, \bm{u}_{k+1})$
+            \IF{$\|\bm{u}_{k+1} - \lambda_k \bm{y}_k\|\le \varepsilon$}
+            \PRINT
+            \ENDIF
+            \ENDFOR
+            \STATE $\lambda \leftarrow \lambda_k$
+            \STATE $\bm{x} \leftarrow \bm{y}_k$
+        \end{algorithmic}
+        }
+    \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
